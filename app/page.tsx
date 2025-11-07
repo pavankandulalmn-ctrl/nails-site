@@ -364,11 +364,7 @@ export default function NailSalonSite() {
                   <Button type="submit" className="rounded-2xl border" style={{ backgroundColor: BRAND.ink, color: "#fff", borderColor: BRAND.ink }}>
                     Request Appointment 💌
                   </Button>
-                  <a href={`tel:${BRAND.phoneLink}`} className="inline-flex">
-                    <Button variant="outline" className="rounded-2xl border" style={{ borderColor: BRAND.ink, color: BRAND.ink }}>
-                      Call 📞
-                    </Button>
-                  </a>
+                  
                 </div>
               </form>
             )}
