@@ -10,7 +10,7 @@ const accent = Dancing_Script({ subsets: ["latin"], weight: ["700"] });
 
 // Update these to match your brand
 const BRAND = {
-  name: "Nailz doneby Nita",
+  name: "Nails doneby Nita",
   handle: "donebynitaa",
   instagram: process.env.NEXT_PUBLIC_INSTAGRAM,
   //phoneDisplay: process.env.NEXT_PUBLIC_PHONE_DISPLAY,
@@ -59,28 +59,28 @@ const SERVICES = [
   },
   {
     name: "Overlay Nail Set",
-    desc: "Starting price $60",
+    desc: "",
     price: "$60.00",
     duration: "1 hour 30 minutes",
     //img: "/service3.jpg",
   },
   {
     name: "Overlay Toes",
-    desc: "Starting price $60",
+    desc: "",
     price: "$60.00",
     duration: "1 hour 30 minutes",
    // img: "/service3.jpg",
   },
   {
     name: "Man Manicure",
-    desc: "Starting price $60",
+    desc: "",
     price: "$40.00",
     duration: "1 hour",
     img: "/services4.jpg",
   },
   {
     name: "Nail & Toes",
-    desc: "Starting price $60",
+    desc: "",
     price: "$85.00",
     duration: "3 hour 30 minutes",
     img: "/services6.jpg",
