@@ -1,40 +1,33 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-// Ensure Node runtime on Vercel (not Edge)
-export const runtime = "nodejs";
+export const runtime = "nodejs"; // Make sure this runs in Node on Vercel
 
 export async function POST(req: Request) {
   try {
     const data = await req.formData();
 
-    // Helper to safely extract strings from FormData
-    const s = (key: string) => {
-      const v = data.get(key);
-      return typeof v === "string" ? v.trim() : ""; // ignore File/null
+    // Safely extract only strings (ignore File/null)
+    const getStr = (key: string): string => {
+      const value = data.get(key);
+      return typeof value === "string" ? value.trim() : "";
     };
 
-    const name = s("name");
-    const email = s("email");
-    const phone = s("phone");
-    const service = s("service");
-    const date = s("date");
-    const time = s("time");
-    const message = s("message");
+    const name = getStr("name");
+    const email = getStr("email");
+    const phone = getStr("phone");
+    const service = getStr("service");
+    const date = getStr("date");
+    const time = getStr("time");
+    const message = getStr("message");
 
-    if (!name || !email || !phone || !service) {
-      return NextResponse.json({ ok: false, error: "Missing required fields" }, { status: 400 });
-    }
-
-    const user = process.env.MAIL_USER;
-    const pass = process.env.MAIL_PASS;
-    if (!user || !pass) {
-      return NextResponse.json({ ok: false, error: "MAIL_USER/MAIL_PASS not set" }, { status: 500 });
-    }
-
+    // transporter
     const transporter = nodemailer.createTransport({
       service: "gmail",
-      auth: { user, pass },
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      },
     });
 
     const html = `
@@ -43,23 +36,23 @@ export async function POST(req: Request) {
       <p><b>Email:</b> ${email}</p>
       <p><b>Phone:</b> ${phone}</p>
       <p><b>Service:</b> ${service}</p>
-      <p><b>Date:</b> ${date || "—"}</p>
-      <p><b>Time:</b> ${time || "—"}</p>
-      <p><b>Message:</b> ${message || "—"}</p>
+      <p><b>Date:</b> ${date}</p>
+      <p><b>Time:</b> ${time}</p>
+      <p><b>Message:</b> ${message}</p>
     `;
 
+    // ✅ Use conditional spread to include replyTo only if email is valid
     await transporter.sendMail({
-      from: `"donebynita bookings" <${user}>`,
+      from: `"donebynita bookings" <${process.env.MAIL_USER}>`,
       to: "donebynitaa@gmail.com, pavankandula.0@gmail.com",
       subject: "New Nail Booking Request",
       html,
-      // email is guaranteed string now
-      replyTo: email || undefined,
+      ...(email ? { replyTo: email } : {}), // prevents type error completely
     });
 
     return NextResponse.json({ ok: true });
-  } catch (err) {
-    console.error("Error sending mail:", err);
+  } catch (error) {
+    console.error("Error sending mail:", error);
     return NextResponse.json({ ok: false }, { status: 500 });
   }
 }
