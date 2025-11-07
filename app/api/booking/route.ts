@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-export const runtime = "nodejs"; // Make sure this runs in Node on Vercel
+export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
     const data = await req.formData();
 
-    // Safely extract only strings (ignore File/null)
     const getStr = (key: string): string => {
       const value = data.get(key);
       return typeof value === "string" ? value.trim() : "";
@@ -21,7 +20,6 @@ export async function POST(req: Request) {
     const time = getStr("time");
     const message = getStr("message");
 
-    // transporter
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -41,13 +39,12 @@ export async function POST(req: Request) {
       <p><b>Message:</b> ${message}</p>
     `;
 
-    // ✅ Use conditional spread to include replyTo only if email is valid
     await transporter.sendMail({
       from: `"donebynita bookings" <${process.env.MAIL_USER}>`,
-      to: "donebynitaa@gmail.com, pavankandula.0@gmail.com",
+      to: process.env.MAIL_TO, // ✅ No email in code
       subject: "New Nail Booking Request",
       html,
-      ...(email ? { replyTo: email } : {}), // prevents type error completely
+      ...(email ? { replyTo: email } : {}),
     });
 
     return NextResponse.json({ ok: true });
