@@ -83,7 +83,7 @@ const SERVICES = [
     desc: "",
     price: "$85.00",
     duration: "3 hour 30 minutes",
-    img: "/services6.jpg",
+    img: "/Services6.jpg",
   },
 ];
 
